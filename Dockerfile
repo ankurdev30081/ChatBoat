@@ -15,7 +15,8 @@ RUN npm run build
 # ==========================================
 # Stage 2: Setup Python Backend + Serve Both
 # ==========================================
-FROM python:3.12-slim AS final
+# Use python:3.12-slim-bookworm (Debian 12 Stable) for official Playwright OS dependency support
+FROM python:3.12-slim-bookworm AS final
 
 WORKDIR /app
 
