@@ -24,9 +24,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy backend requirements and install Python dependencies
+# Copy backend requirements
 COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Install CPU-only PyTorch first (much smaller download size ~150MB vs ~900MB GPU version)
+# and increase pip timeout to prevent network ReadTimeoutError
+RUN pip install --no-cache-dir --default-timeout=1000 torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir --default-timeout=1000 -r requirements.txt
 
 # Install Playwright Chromium headless browser & OS dependencies
 RUN python -m playwright install --with-deps chromium
