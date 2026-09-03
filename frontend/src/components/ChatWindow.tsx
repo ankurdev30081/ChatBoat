@@ -37,9 +37,10 @@ export default function ChatWindow() {
       setSessionId(res.session_id);
       setMessages((m) => [...m, { role: "assistant", content: res.reply, sources: res.sources }]);
     } catch (err) {
+      const msg = err instanceof Error ? err.message : "Error reaching server";
       setMessages((m) => [
         ...m,
-        { role: "assistant", content: "Sorry, something went wrong reaching the server. Please try again." },
+        { role: "assistant", content: `Sorry, something went wrong: ${msg}` },
       ]);
     } finally {
       setLoading(false);

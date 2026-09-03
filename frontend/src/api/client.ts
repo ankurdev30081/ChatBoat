@@ -18,7 +18,9 @@ export async function sendMessage(message: string, sessionId: string | null): Pr
     body: JSON.stringify({ message, session_id: sessionId }),
   });
   if (!res.ok) {
-    throw new Error(`Chat request failed: ${res.status}`);
+    const errJson = await res.json().catch(() => null);
+    const detail = errJson?.detail || `Chat request failed: ${res.status}`;
+    throw new Error(detail);
   }
   return res.json();
 }
