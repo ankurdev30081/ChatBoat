@@ -1,9 +1,9 @@
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL !== undefined
-    ? import.meta.env.VITE_API_BASE_URL
-    : import.meta.env.DEV
-    ? "http://localhost:8000"
-    : "";
+const rawUrl = import.meta.env.VITE_API_BASE_URL || "";
+const cleanUrl = rawUrl.replace(/\/$/, "");
+
+const API_BASE_URL = import.meta.env.DEV
+  ? (cleanUrl || "http://localhost:8000")
+  : (cleanUrl.includes("localhost") ? "" : cleanUrl);
 
 export interface ChatResponse {
   reply: string;
